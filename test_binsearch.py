@@ -4,7 +4,7 @@ import numpy as np
 
 def test_BS():
 	myInput = list(range(10))
-	 binary_search(myInput,5) == 5
+	assert binary_search(myInput,5) == 5
 
 def decimal_BS():
 	myInput = list(range(10))
@@ -44,7 +44,7 @@ def sameLeftRight_BS():
 
 def sameLeftRight2_BS():
 	myInput = list(range(10))
-	binary_search(myInput, 5, 2, 2) == -1
+	assert binary_search(myInput, 5, 2, 2) == -1
 
 
 
