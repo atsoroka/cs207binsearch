@@ -36,7 +36,7 @@ def  leftRight2_BS():
 
 def crossLeftRight_BS():
 	myInput = list(range(10))
-	assert = binary_search(myInput, 2, 3, 1) == -1
+	assert binary_search(myInput, 2, 3, 1) == -1
 
 def sameLeftRight_BS():
 	myInput = list(range(10))
