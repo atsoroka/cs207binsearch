@@ -4,12 +4,31 @@
 from pytest import raises
 from binsearch import binary_search
 import numpy as np
+import random
 
 # baseline test that binary search can find value in sorted list
 def test_BS():
 	myInput = list(range(10))
 	assert binary_search(myInput,5) == 5
 
+# Index returned is less than length of the input
+def test_BS_index():
+	myInput = list(range(10))
+	mySearch = random.randrange(0,10)
+	index = binary_search(myInput,mySearch)
+	assert index < len(myInput)
+
+# baseline test that binary search can find value in a set
+def test_BS_set():
+	myInput = set(list(range(10)))
+	with raises(TypeError):
+		binary_search(myInput,5)
+
+# baseline test that binary search can find value in sorted NumpyArray
+def test_BS_np():
+	myInput = np.array(list(range(10)))
+	assert binary_search(myInput,5) == 5
+	
 #if value not in list, return -1
 def test_decimal_BS():
 	myInput = list(range(10))
@@ -28,6 +47,21 @@ def test_single_BS():
 def test_singleNot_BS():
 	assert binary_search([5], 4) == -1
 
+#if 'nan' is passed, user has violated agreement as NAN isn't really sortable
+def test_Nan_BS():
+	nan = [float('nan'),1] 
+	assert binary_search(nan,1) == 0
+
+#if 'nan' is passed, user has violated agreement as NAN isn't really sortable
+def test_Nan2_BS():
+	nan = [np.nan,1,2,3,4,5] 
+	assert binary_search(nan,1) == 0
+
+#if 'nan' is passed, user has violated agreement as NAN isn't really sortable
+def test_Nan3_BS():
+	nan = [np.nan,1,2,3,4,5] 
+	assert binary_search(nan,2) == 2
+
 #if np.inf is list, can still locate needle
 def test_wInf_BS():
 	assert binary_search([1,2,np.inf], 2) == 1
@@ -36,12 +70,12 @@ def test_wInf_BS():
 def test_wInf2_BS():
 	assert binary_search([1,2,np.inf], np.inf) == 2
 
-# left right values set, function still runs
+# left right values set, function still runs, value not found
 def  test_leftRight_BS():
 	myInput = list(range(10))
 	assert binary_search(myInput, 5, 1,3) ==  -1
 
-# left right values set, function still runs
+# left right values set, function still runs, value found
 def  test_leftRight2_BS():
 	myInput = list(range(10))
 	assert binary_search(myInput, 2, 1,3) == 2
@@ -51,12 +85,12 @@ def crossLeftRight_BS():
 	myInput = list(range(10))
 	assert binary_search(myInput, 2, 3, 1) == -1
 
-# left right values set to same value, function still runs
+# left right values set to same value, function still runs, value found
 def test_sameLeftRight_BS():
 	myInput = list(range(10))
 	assert binary_search(myInput, 2, 2, 2) == 2
 
-# left right values set to same value, function still runs
+# left right values set to same value, function still runs, value not found
 def test_sameLeftRight2_BS():
 	myInput = list(range(10))
 	assert binary_search(myInput, 5, 2, 2) == -1
@@ -65,6 +99,16 @@ def test_sameLeftRight2_BS():
 def test_char_BS():
 	myInput = ['a','b','c']
 	assert binary_search(myInput,'b') == 1
+
+# Binary search works on string list
+def test_string_BS():
+	myInput = ['Anthony','Betty','Charlie']
+	assert binary_search(myInput,'Charlie') == 2
+
+# Binary search works on string
+def test_string2_BS():
+	myInput = "abcdefg"
+	assert binary_search(myInput,'d') == 3
 
 # Binary search works on  float list
 def char_BS():
@@ -93,7 +137,7 @@ def test_multipleTimes4():
 def test_negInf_BS():
 	assert binary_search([-np.inf,1,2,np.inf], -np.inf) == 0
 
-# Negative Index still runs
+# Negative Left Index still runs and returns as normal
 def test_negativeIndex():
 	myInput = list(range(10))
 	assert binary_search(myInput,2,-5,5) == 2
@@ -110,11 +154,40 @@ def test_IntInfIndex():
 	with raises(OverflowError):
 		binary_search(myInput, 2, 1,int(np.inf))
 
-#Max surpasses index, returns an error
+#Right surpasses index, returns an error
 def test_ExceedIndex():
 	myInput = list(range(10))
 	with raises(IndexError):
 		binary_search(myInput, 2, 1,50)
+
+#da_Array is not an array
+def test_non_array():
+	myInput = 12345
+	with raises(TypeError):
+		binary_search(myInput, 5)
+
+#da_Array is not an array
+def test_non_array2():
+	myInput = 12345
+	with raises(TypeError):
+		binary_search(myInput, myInput)
+
+#da_array and needle are the same array
+def test_needle_array():
+	myInput = list(range(10))
+	with raises(TypeError):
+		binary_search(myInput, myInput)
+
+#da_array is an array of array
+def test_arrayofarray():
+	myInput = [[1],[2],[3],[4],[5]]
+	assert binary_search(myInput,[3]) == 2
+
+#da_array is a dictionary
+def test_dictionary():
+	myInput = {'A' : 'a', 'B' : 'b', 'C': 'c'}
+	with raises(KeyError):
+		binary_search(myInput, myInput['A'])
 
 
 
