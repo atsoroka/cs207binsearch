@@ -189,6 +189,10 @@ def test_dictionary():
 	with raises(KeyError):
 		binary_search(myInput, myInput['A'])
 
+#da_array is not sorted, user broke agreement
+def test_notSorted():
+	myInput = [6,5,4]
+	assert binary_search(myInput,4) == -1
 
 
 
